@@ -86,14 +86,12 @@ def create_profile(token: str, proxy: list, index: int, extension_paths: list, b
 
     if (response.status_code != 201):
         message = response.json()['status']['message']
-        profile_started = False
         profile_id = False
-        return profile_id, profile_started, message
+        return profile_id, message
     else:
         profile_id = response.json()['data']['ids'][0]
-        profile_started = True
         message = response.json()['status']['message']
-        return profile_id, profile_started, message
+        return profile_id, message
 
 def start_profile(token: str, profile_id: str) -> str:
     HEADERS.update({
@@ -104,11 +102,14 @@ def start_profile(token: str, profile_id: str) -> str:
     response = requests.get(url=url, headers=HEADERS)
     if response.status_code != 200:
         message = response.json()['status']['message']
+        profile_port = False
+        profile_started = False
         print(f"Error at starting profile: {message}")
-        raise "Error at starting profile!"
+        return profile_port, profile_started
     else:
-        port = response.json()['data']['port']
-        return port 
+        profile_port = response.json()['data']['port']
+        profile_started = True
+        return profile_port, profile_started
 
 def stop_profile(profile_id: str, token: str) -> str:
     HEADERS.update({

@@ -13,7 +13,6 @@ def automation(driver, profile_id, token) -> None:
         for i, article in enumerate(articles):
              article_text = article.find_element(By.TAG_NAME, "a").text
              print(f"{i+1}. {article_text}")
-        time.sleep(60)
         print("\nBasic automation finished.\n")
             
     except Exception as e:
@@ -25,15 +24,16 @@ def automation(driver, profile_id, token) -> None:
 
 def main(proxy, index, extension_paths) -> None:
     token = mlx.signin()
+    profile_id, message = mlx.create_profile(token, proxy, index, extension_paths)
+
     profile_started = False
     while profile_started != True:
-        profile_id, profile_started, message = mlx.create_profile(token, proxy, index, extension_paths)
+        profile_port, profile_started = mlx.start_profile(token, profile_id)
         if profile_started == True:
                 break
         print(f"Profile couldn't be started. Probably downloading core. Will wait for 60 seconds and try again. Here is the message: {message}")
         time.sleep(60)
 
-    profile_port = mlx.start_profile(token, profile_id)
     driver = mlx.instantiate_driver(profile_port)
     automation(driver, profile_id, token)
 
