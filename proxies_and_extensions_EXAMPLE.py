@@ -31,7 +31,7 @@ proxies = [
 ]
       
 # Add the extensions you want here
-# You can only use unpacked cookie folders
+# You can only use unpacked extension folders
 extension_paths = [
      "C:\\path\\to\\extension1",
      "C:\\path\\to\\extension2",
