@@ -38,7 +38,7 @@ def create_profile(token: str, proxy: list, index: int, extension_paths: list, b
     payload = {
     "browser_type": browser_type,
     "folder_id": folder_id,
-    "name": f"Profile number {index + 1}",
+    "name": f"Profile number {index}",
     "os_type": "windows",
     "proxy": {
         "host": proxy["host"],
@@ -87,11 +87,11 @@ def create_profile(token: str, proxy: list, index: int, extension_paths: list, b
     if (response.status_code != 201):
         message = response.json()['status']['message']
         profile_id = False
-        return profile_id, message
+        raise f"Error while creating profile: {message}"
     else:
         profile_id = response.json()['data']['ids'][0]
         message = response.json()['status']['message']
-        return profile_id, message
+        return profile_id
 
 def start_profile(token: str, profile_id: str) -> str:
     HEADERS.update({
@@ -105,11 +105,12 @@ def start_profile(token: str, profile_id: str) -> str:
         profile_port = False
         profile_started = False
         print(f"Error at starting profile: {message}")
-        return profile_port, profile_started
+        return profile_port, profile_started, message
     else:
         profile_port = response.json()['data']['port']
+        message = response.json()['status']['message']
         profile_started = True
-        return profile_port, profile_started
+        return profile_port, profile_started, message
 
 def stop_profile(profile_id: str, token: str) -> str:
     HEADERS.update({

@@ -24,11 +24,11 @@ def automation(driver, profile_id, token) -> None:
 
 def main(proxy, index, extension_paths) -> None:
     token = mlx.signin()
-    profile_id, message = mlx.create_profile(token, proxy, index, extension_paths)
+    profile_id = mlx.create_profile(token, proxy, index, extension_paths)
 
     profile_started = False
     while profile_started != True:
-        profile_port, profile_started = mlx.start_profile(token, profile_id)
+        profile_port, profile_started, message = mlx.start_profile(token, profile_id)
         if profile_started == True:
                 break
         print(f"Profile couldn't be started. Probably downloading core. Will wait for 60 seconds and try again. Here is the message: {message}")
