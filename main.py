@@ -17,7 +17,7 @@ def automation(driver, profile_id, token) -> None:
             
     except Exception as e:
             print(f"Something happened: {e}")
-            driver.quit()
+        
     finally:
         driver.quit()
         mlx.stop_profile(profile_id, token)
